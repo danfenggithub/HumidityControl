@@ -45,7 +45,7 @@ configuration, you can run the specific programs
 in each folder.
 
 ---------------
-本项目是分布式智能湿度控制,基于Rainbow算法对多个恒湿机进行风速调控,实验结果见论文
+本项目是分布式智能湿度控制,基于Rainbow算法对多个恒湿机进行风速调控.
 
 运行该项目需要基于linux操作系统且需要下载安装 Simcenter STAR-CCM+软件,
 安装TensorFlow2相关的依赖包
