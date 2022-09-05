@@ -1,0 +1,95 @@
+absl-py==0.9.0
+astor==0.8.0
+atari-py==0.2.6
+attrs==20.3.0
+certifi==2021.5.30
+chardet==3.0.4
+click==7.1.2
+cloudpickle==1.6.0
+colorama==0.3.9
+configparser==5.0.1
+cycler==0.10.0
+decorator==4.1.2
+docker-pycreds==0.4.0
+future==0.18.2
+gast==0.2.2
+gitdb==4.0.5
+GitPython==3.1.12
+google-pasta==0.2.0
+graphviz==0.8.4
+grpcio==1.27.2
+gym==0.18.0
+h5py==2.10.0
+idna==2.6
+importlib-metadata==4.0.1
+ipykernel==4.6.1
+ipython==6.1.0
+ipython-genutils==0.2.0
+jedi==0.10.2
+joblib==1.0.1
+jupyter-client==5.1.0
+jupyter-core==4.3.0
+Keras-Applications==1.0.8
+Keras-Preprocessing==1.1.0
+kiwisolver @ file:///C:/ci/kiwisolver_1612282446297/work
+Markdown==3.1.1
+matplotlib @ file:///C:/ci/matplotlib-suite_1613408055530/work
+mkl-fft==1.1.0
+mkl-random==1.1.1
+mkl-service==2.3.0
+msgpack==1.0.2
+mxnet==1.6.0
+netron==4.9.1
+numpy==1.19.0
+olefile==0.46
+opencv-python==4.5.1.48
+opt-einsum==3.1.0
+pandas @ file:///C:/ci/pandas_1608056614942/work
+path.py==10.3.1
+pathtools==0.1.2
+pickleshare==0.7.4
+Pillow @ file:///C:/ci/pillow_1625663293114/work
+promise==2.3
+prompt-toolkit==1.0.15
+protobuf==3.12.3
+psutil==5.8.0
+pyglet==1.5.0
+Pygments==2.2.0
+PyMouse==1.0
+pyparsing @ file:///home/linux1/recipes/ci/pyparsing_1610983426697/work
+pyreadline==2.1
+pyrsistent==0.17.3
+python-dateutil @ file:///home/ktietz/src/ci/python-dateutil_1611928101742/work
+pytz==2017.2
+PyUserInput==0.1.10
+pywin32==300
+PyYAML==5.4
+pyzmq==16.0.2
+requests==2.18.4
+scikit-learn==0.24.2
+scipy==1.4.1
+seaborn @ file:///tmp/build/80754af9/seaborn_1608578541026/work
+sentry-sdk==0.19.5
+shortuuid==1.0.1
+simplegeneric==0.8.1
+six==1.15.0
+smmap==3.0.4
+subprocess32==3.5.4
+tensorboard==2.0.0
+tensorflow==2.0.0
+tensorflow-estimator==2.0.0
+termcolor==1.1.0
+threadpoolctl==2.1.0
+tornado==4.5.2
+tqdm @ file:///tmp/build/80754af9/tqdm_1607369919789/work
+traitlets==4.3.2
+typing-extensions==3.7.4.3
+urllib3==1.22
+wandb==0.10.14
+watchdog==0.10.4
+wcwidth==0.1.7
+Werkzeug==0.16.1
+wincertstore==0.2
+wrapt==1.12.1
+xgboost==1.4.2
+zipp==3.4.1
