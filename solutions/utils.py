@@ -14,18 +14,22 @@ def getMassFraction(T, RH):
         温度、湿度对应的空气水分子质量分数
     :param T: 室内某点的温度
     :param RH: 室内某点的湿度
-    :return: 空气水分子质量分数
+    :return MFdata: 空气水分子质量分数
     """
     with open(os.path.dirname(os.path.realpath(__file__)) + "/MFdata.json", 'r') as f:
         data = json.load(f)
         T = str(T)
         RH = str(RH)
+
         # hum_ratio为含湿量
+        # hum_ratio is moisture content
         hum_ratio = data[T][RH]
         h2o_ratio = float(hum_ratio) / 1000
         h2o_ratio = round(h2o_ratio, 7)
         air_ratio = float(1) - h2o_ratio
+
         # 格式化数据
+        # Format data
         MFdata = '{' + str(h2o_ratio) + ',' + str(air_ratio) + '}'
 
         return MFdata
@@ -49,6 +53,7 @@ class Logger(object):
 
 
 def log():
+    # Log file location setting
     # 自定义目录存放日志文件
     log_path = 'out/logs/'
     # 日志文件名按照程序运行时间设置
@@ -64,6 +69,7 @@ from .gymProfile import *
 
 def checkExistFile():
     # 删除系统中存在的历史文件
+    # Delete history files
     if os.path.exists(episode_reward_history_csv):
         os.remove(episode_reward_history_csv)
     if os.path.exists(each_episode_rewards_history_csv):
