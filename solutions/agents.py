@@ -5,7 +5,8 @@ import numpy as np
 from .networks import DenseNetwork, NoisyDenseNetwork
 from .memories import PrioritizedMemory, NStepMemory
 
-# action自定义初始化
+# action初始化
+# Action: Initialization
 a_action = [40, 50, 60]
 b_action = [0, 1, 2, 3]
 c_action = [40, 50, 60]
