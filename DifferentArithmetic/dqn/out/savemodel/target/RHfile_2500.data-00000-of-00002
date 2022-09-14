@@ -1,0 +1,36 @@
+ÚÈE∑"
+b
+body
+head
+layer_with_weights-0
+layer-0
+layer_with_weights-1
+layer-1
+
+0
+1
+
+
+kernel
+bias
+
+
+kernel
+bias
+
+
+	kernel
+
+bias
+GE
+VARIABLE_VALUEhead/kernel&head/kernel/.ATTRIBUTES/VARIABLE_VALUE
+CA
+VARIABLE_VALUE	head/bias$head/bias/.ATTRIBUTES/VARIABLE_VALUE
+IG
+VARIABLE_VALUEbody/kernel(body/0/kernel/.ATTRIBUTES/VARIABLE_VALUE
+EC
+VARIABLE_VALUE	body/bias&body/0/bias/.ATTRIBUTES/VARIABLE_VALUE
+KI
+VARIABLE_VALUEbody_1/kernel(body/1/kernel/.ATTRIBUTES/VARIABLE_VALUE
+GE
+VARIABLE_VALUEbody_1/bias&body/1/bias/.ATTRIBUTES/VARIABLE_VALUE
