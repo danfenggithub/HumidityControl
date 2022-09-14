@@ -1,0 +1,143 @@
+nohup: ignoring input
+2021-06-04 11:25:07.376297: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2021-06-04 11:25:07.399917: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: GeForce RTX 2080 Ti major: 7 minor: 5 memoryClockRate(GHz): 1.545
+pciBusID: 0000:b3:00.0
+2021-06-04 11:25:07.400133: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2021-06-04 11:25:07.401257: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2021-06-04 11:25:07.402269: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
+2021-06-04 11:25:07.402524: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
+2021-06-04 11:25:07.403863: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
+2021-06-04 11:25:07.404960: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
+2021-06-04 11:25:07.408466: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2021-06-04 11:25:07.409509: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2021-06-04 11:25:07.431616: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 AVX512F FMA
+2021-06-04 11:25:07.436550: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 3800000000 Hz
+2021-06-04 11:25:07.436761: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x556398e67650 executing computations on platform Host. Devices:
+2021-06-04 11:25:07.436775: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Host, Default Version
+2021-06-04 11:25:07.437341: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: GeForce RTX 2080 Ti major: 7 minor: 5 memoryClockRate(GHz): 1.545
+pciBusID: 0000:b3:00.0
+2021-06-04 11:25:07.437386: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2021-06-04 11:25:07.437394: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2021-06-04 11:25:07.437402: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
+2021-06-04 11:25:07.437409: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
+2021-06-04 11:25:07.437416: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
+2021-06-04 11:25:07.437423: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
+2021-06-04 11:25:07.437430: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2021-06-04 11:25:07.438198: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
+2021-06-04 11:25:07.438225: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2021-06-04 11:25:07.528968: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2021-06-04 11:25:07.529011: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
+2021-06-04 11:25:07.529019: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
+2021-06-04 11:25:07.530558: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 300 MB memory) -> physical GPU (device: 0, name: GeForce RTX 2080 Ti, pci bus id: 0000:b3:00.0, compute capability: 7.5)
+2021-06-04 11:25:07.535124: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5563975c99d0 executing computations on platform CUDA. Devices:
+2021-06-04 11:25:07.535154: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): GeForce RTX 2080 Ti, Compute Capability 7.5
+2021-06-04 11:25:07.869027: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+CPU contention on 1 process could not be resolved. CPU affinity will be cleared on that process.
+Serial process 9020
+
+Simcenter STAR-CCM+ 2019.1 Build 14.02.010 (linux-x86_64-2.12/gnu7.1-r8)
+
+License build date: 09 November 2018
+This version of the code requires license version 2019.02 or greater.
+Checking license file: /opt/Siemens/14.02.010-R8/license.dat
+Checking license file: /opt/Siemens/15.06.008-R8/license.dat
+1 copy of ccmpsuite checked out from /opt/Siemens/14.02.010-R8/license.dat
+Feature ccmpsuite does not expire
+Fri Jun  4 11:25:12 2021
+
+Server::start -host ubuntu:48995
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+timestep 0 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 1 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 2 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 3 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 4 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 5 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 6 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 7 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 8 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 9 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 10 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 11 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 12 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 13 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 14 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 15 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 16 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 17 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 18 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 19 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+episode 0 score -20 score_max -20 FanPowerSUM 7.200000000000002
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+timestep 0 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 1 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 2 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 3 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 4 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 5 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 6 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 7 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 8 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 9 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 10 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 11 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 12 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 13 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 14 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 15 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 16 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 17 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 18 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 19 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+episode 1 score -20 score_max -20 FanPowerSUM 7.200000000000002
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+timestep 0 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 1 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 2 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 3 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 4 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 5 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 6 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 7 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 8 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 9 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 10 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 11 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 12 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 13 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 14 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 15 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 16 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 17 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 18 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+timestep 19 action: [60, 60, 60, 1, 0, 2] reward: -1 fanpower: 0.36
+episode 2 score -20 score_max -20 FanPowerSUM 7.200000000000002
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+等待环境初始化
+starccm+ Terminated
