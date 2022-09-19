@@ -4,12 +4,12 @@ from scipy import interpolate
 import matplotlib.pyplot as plt
 from HumidityControl.solutions.gymRoom import *
 
-# pre = "csv/"
-pre = "csv100/"
+pre = "csv/"  # Single interference
+#
+# pre = "csv100/"  # Multiple interference
 
 # language = "cn"
 language = "us"
-# us 代表英文，cn代表英文
 
 filename = ["baseline.csv", "baselinepoints.csv", "power1.csv", "power2.csv", "power3.csv", "dqn_15.csv",
             "pid.csv", "pid_m.csv", "6points.csv", "9points.csv", "15points.csv"]
@@ -102,15 +102,13 @@ RHRewardList = [IfElseRHRewardList / 9, IfElseRHRewardList_M / 9, Power1RHReward
                 Power3RHRewardList / 15, dqnRHRewardList / 15, pidRHRewardList / 9, pid_mRHRewardList / 9,
                 points6RHRewardList / 6, points9RHRewardList / 9, points15RHRewardList / 15]
 
-# print(RHRewardList)
-
 plt.figure(1)
-# 设置xtick和ytick的方向：in、out、inout
+
 plt.rcParams['xtick.direction'] = 'in'
 plt.rcParams['ytick.direction'] = 'in'
 
-plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
-plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+plt.rcParams['font.sans-serif'] = ['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
 import matplotlib.pyplot as plt
 
 if language == "cn":
@@ -121,12 +119,6 @@ else:
 plt.figure(figsize=(8, 3), dpi=600)
 
 ax1 = plt.subplot(111)
-
-# Color = ["r", 'gold', 'orange', 'lightgreen', "b", "indigo", "c", "black"]
-# Linesty1e = ['-', '-', '-', '-', '-', '-', '-', '-']
-# # markers = ['o', '^', 's', 'p', '*', '+', 'D', 'd', '|', '_']
-# filename = ["baseline.csv", "baselinepoints.csv", "power1.csv", "power2.csv", "power3.csv", "dqn_15.csv",
-#             "pid.csv", "pid_m.csv", "6points.csv", "9points.csv", "15points.csv"]
 
 Color = ["r", 'gray', 'gold', 'orange', 'lightgreen', "b", "darkblue", "chocolate", "c", "m", "pink"]
 Linesty1e = ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
@@ -196,40 +188,18 @@ for i in range(len(RHvar)):
 
 merge_data['sum'] = merge_data.iloc[:, :].apply(lambda x: x.sum(), axis=1)
 merge_data['mean'] = merge_data.iloc[:, :-1].apply(lambda x: x.mean(), axis=1)
-merge_data.to_csv("result.csv", sep=',', encoding='utf-8')
+# merge_data.to_csv("result.csv", sep=',', encoding='utf-8')
 
-# for m in range(len(PowerList)):
-#     # print(PowerList[m].values)
-#     # print(PowerList[m].index)
-#     # PowerList[m].pop(0)
-#     # print(PowerList[m])
-#     ax2.fill_between(PowerList[m].index, PowerList[m].values, color=Color[m], step="post", alpha=0.2)
-#     ax2.step(PowerList[m].index, PowerList[m].values, label=strategyName[m], color=Color[m], ls=Linesty1e[m],
-#              alpha=0.4, where='post')
+if pre == "csv100/":
+    steps = 100
+else:
+    steps = 50
 
-# ax2.set_title('不同策略的功率变化曲线', fontsize=20)
-# ax2.set_xlabel('step数（一个step相当于30秒）', fontsize=20)
-# ax2.set_ylabel('恒湿机功率（kw/h）', fontsize=20)
-# plt.xticks(fontproperties='Times New Roman', size=20)
-# plt.yticks(fontproperties='Times New Roman', size=20)
-# plt.legend(loc="upper right", fontsize=20)
-# plt.tight_layout()
-# plt.show()
-#
-# plt.figure(3)
-# plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
-# plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
-# plt.figure(figsize=(10, 8), dpi=180)
-# ax3 = plt.subplot(111)
-#
-# plt.bar(range(len(sumPowerList)), sumPowerList, color=Color, tick_label=[mm for mm in strategyName], alpha=0.4)
-# # ax3.plot(x1_smooth, y1_smooth, label=filename[m].split(".")[0], color=Color[m], ls=Linesty1e[m])
-# # plt.fill_between(x1_smooth, 0, y1_smooth, facecolor=Color[m], alpha=0.5)
-#
-# ax3.set_title('不同策略的总功耗对比', fontsize=20)
-# ax3.set_xlabel('不同的策略', fontsize=20)
-# ax3.set_ylabel('恒湿机总功耗（KW.h）', fontsize=20)
-# plt.xticks(fontproperties='Times New Roman', size=10, rotation=-15)
-# plt.yticks(fontproperties='Times New Roman', size=20)
-# plt.tight_layout()
-# plt.show()
+lens = len(filename)
+df1 = pd.DataFrame(merge_data['mean'][:lens].values, columns=['FV'], index=strategyName)
+df2 = pd.DataFrame(merge_data['sum'][lens:2 * lens].values, columns=['EC'], index=strategyName)
+df3 = pd.DataFrame(merge_data['mean'][2 * lens:].values, columns=['UF'], index=strategyName)
+df4 = pd.DataFrame(-((df1.values/10)*0.9+((df2.values/steps*3600/5/30-0.06)/0.9)*0.1)*steps, columns=['R'], index=strategyName)
+df_ = df1.join(df2).join(df3).join(df4)
+savepic = pre + "pic/"
+df_.T.to_csv(savepic + "result.csv", sep=',', encoding='utf-8')

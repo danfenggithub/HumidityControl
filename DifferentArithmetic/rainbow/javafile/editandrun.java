@@ -182,13 +182,13 @@ public class editandrun extends StarMacro {
     simulation_0.saveState("humidity.sim");
 
     try {
-        /* 写入Txt文件 */
-        File writename = new File("javafile/info.txt"); // 相对路径，如果没有则要建立一个新的output。txt文件
-        writename.createNewFile(); // 创建新文件
+
+        File writename = new File("javafile/info.txt");
+        writename.createNewFile();
         BufferedWriter out = new BufferedWriter(new FileWriter(writename));
         out.write("false");
-        out.flush(); // 把缓存区内容压入文件
-        out.close(); // 最后记得关闭文件
+        out.flush();
+        out.close();
     } catch (Exception e) {
         e.printStackTrace();
     }

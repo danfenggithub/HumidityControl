@@ -1,7 +1,7 @@
 from HumidityControl.pid import pid_m
-# 15个点，时间间隔30秒
+# 15 points at 30 second intervals
 pid_m.pid(21,  30)
 
 # from HumidityControl.pid import pid
-# # # 单个点，时间间隔30秒
+# # A single point with a time interval of 30 seconds
 # pid.pid(21,  30)

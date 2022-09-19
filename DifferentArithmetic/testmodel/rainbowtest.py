@@ -1,11 +1,11 @@
 import os
 
-# 启用 GPU 0
+
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 import tensorflow as tf
 
-# 限制 gpu 0 占用内存大小
+
 gpus = tf.config.experimental.list_physical_devices('GPU')
 tf.config.experimental.set_virtual_device_configuration(
     gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=300)])
@@ -27,15 +27,15 @@ def thread1():
 
 
 def thread2():
-    # 线程2是后台连续执行Java宏命令，每一轮循环代表一个回合
+
     subprocess.call(runforStepTest_gymGame_command, shell=True)
 
 
 thread_thred1 = threading.Thread(target=thread1)
-# 启动子线程
+
 thread_thred1.start()
 
-# 删除系统中存在的历史文件
+
 checkExistFile()
 time.sleep(2)
 
@@ -44,9 +44,9 @@ state_col_num = 21
 # network_local.build(input_shape=(None, state_col_num))
 # network_local.load_weights("javafile/RHfile_1750")
 
-# 修改信使，让 checkinfo.java 放行，执行下一个宏命令
+
 with open("javafile/info.txt", "w") as f:
-    f.write("false")  # 自带文件关闭功能，不需要再写f.close()
+    f.write("false")
 
 a_action = [40, 50, 60]
 b_action = [0, 1, 2, 3]

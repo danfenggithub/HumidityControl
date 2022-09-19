@@ -4,12 +4,13 @@ from scipy import interpolate
 import matplotlib.pyplot as plt
 from HumidityControl.solutions.gymRoom import *
 
-# pre = "windnoisy/"
-pre = "nowind/"
+pre = "windnoisy/"
+# pre = "nowind/"
 
+# us 代表英文，cn代表英文
+# us stands for English, and cn stands for Chinese
 # language = "cn"
 language = "us"
-# us 代表英文，cn代表英文
 
 csvpath = pre + "csv/"
 savepic = pre + "pic/"
@@ -80,8 +81,8 @@ RHRewardList = [IfElseRHRewardList / point_num, IfElseRHRewardList_M / point_num
                 pidRHRewardList / point_num, pid_mRHRewardList / point_num, points6RHRewardList / point_num]
 
 plt.figure(1, figsize=(5, 3), dpi=600)
-plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
-plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+plt.rcParams['font.sans-serif'] = ['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
 # 设置xtick和ytick的方向：in、out、inout
 plt.rcParams['xtick.direction'] = 'in'
 plt.rcParams['ytick.direction'] = 'in'
@@ -142,30 +143,27 @@ for i in range(len(RHvar)):
     DD.columns = p_col
     merge_data = merge_data.append(DD.T)
 
+
+
 merge_data['sum'] = merge_data.iloc[:, :].apply(lambda x: x.sum(), axis=1)
 merge_data['mean'] = merge_data.iloc[:, :-1].apply(lambda x: x.mean(), axis=1)
-merge_data.to_csv("result.csv", sep=',', encoding='utf-8')
-#
-#
-# ax2 = plt.subplot(2,1,2)
-#
-# plt.bar(range(len(sumPowerList)), sumPowerList, color=Color, tick_label=[mm for mm in strategyName1],
-#         alpha=0.4)
-#
-# if language == "cn":
-#     ax2.set_title('不同策略的总功耗对比', fontsize=20)
-#     ax2.set_xlabel('不同的策略', fontsize=20)
-#     ax2.set_ylabel('恒湿机总功耗（KW.h）', fontsize=20)
-# else:
-#     # ax2.set_title('Total power consumption of different strategies')
-#     ax2.set_title('(b)', y=y)
-#     ax2.set_xlabel('Different strategies')
-#     ax2.set_ylabel('Energy consumption (KW.h)')
-# plt.xticks()
-# plt.yticks()
-#
-# plt.tight_layout()
+# merge_data.to_csv("result.csv", sep=',', encoding='utf-8')
+
+if pre == "nowind/":
+    steps = 20
+else:
+    steps = 50
+
+lens = len(filename)
+df1 = pd.DataFrame(merge_data['mean'][:lens].values, columns=['FV'], index=strategyName)
+df2 = pd.DataFrame(merge_data['sum'][lens:2 * lens].values, columns=['EC'], index=strategyName)
+df3 = pd.DataFrame(merge_data['mean'][2 * lens:].values, columns=['UF'], index=strategyName)
+df4 = pd.DataFrame(-((df1.values / 10) * 0.9 + ((df2.values / steps * 3600 / 5 / 30 - 0.06) / 0.9) * 0.1) * steps,
+                   columns=['R'], index=strategyName)
+df_ = df1.join(df2).join(df3).join(df4)
+
+df_.T.to_csv(savepic + "result.csv", sep=',', encoding='utf-8')
 
 plt.subplots_adjust(bottom=0.14, left=0.1)
-plt.savefig(savepic + "湿度差和总功耗合图.png")
+plt.savefig(savepic + "mean absolute difference of humidity and total power consumption.png")
 plt.show()

@@ -1,6 +1,6 @@
 import os
 
-# 启用 GPU 0
+
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 import tensorflow as tf
 import numpy as np
@@ -16,17 +16,15 @@ def thread1():
 
 
 def thread2():
-    # 线程2是后台连续执行Java宏命令，每一轮循环代表一个回合
+
     subprocess.call(runforStepTest_gymGame_command, shell=True)
-    # 21步
+    # 21 steps
     # subprocess.call(runforStep_gymGame_command, shell=True)
-    # 100
+    # 100 steps
     # subprocess.call(runforStepTest_100step, shell=True)
 
 class PIDController:
-    """
-    输出
-    """
+
 
     def __init__(self, target_val, kp, ki, kd):
         self.target_val = target_val

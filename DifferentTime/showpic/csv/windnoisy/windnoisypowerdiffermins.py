@@ -4,11 +4,21 @@ from scipy import interpolate
 import matplotlib.pyplot as plt
 from HumidityControl.solutions.gymRoom import *
 
+# pre = "1mins/"
+# pre = "3mins/"
 pre = "5mins/"
-time_slot = 5*60
+
+if pre == "1mins/":
+    time_slot = 1 * 60
+elif pre == "3mins/":
+    time_slot = 3 * 60
+elif pre == "5mins/":
+    time_slot = 5 * 60
+
 filename = ["baseline.csv", "baselinepoints.csv", "power1.csv", "power2.csv", "power3.csv", "dqn.csv",
             "pid.csv", "pid_m.csv", "our approach.csv"]
-
+strategyName = ["CCS", "CCS_M", "low setting", "medium setting", "high setting", "DQN", "PID", "PID_M",
+                "RH-rainbow"]
 from scipy.interpolate import make_interp_spline
 
 
@@ -135,39 +145,54 @@ merge_data['sum'] = merge_data.iloc[:, :].apply(lambda x: x.sum(), axis=1)
 merge_data['mean'] = merge_data.iloc[:, :-1].apply(lambda x: x.mean(), axis=1)
 merge_data.to_csv("result.csv", sep=',', encoding='utf-8')
 
-for m in range(len(PowerList)):
-    # print(PowerList[m].values)
-    # print(PowerList[m].index)
-    # PowerList[m].pop(0)
-    # print(PowerList[m])
-    ax2.fill_between(PowerList[m].index, PowerList[m].values, color=Color[m], step="post", alpha=0.2)
-    ax2.step(PowerList[m].index, PowerList[m].values, label=filename[m].split(".")[0], color=Color[m], ls=Linesty1e[m],
-             alpha=0.4, where='post')
+seconds = time_slot
+savepic = pre + "pic/"
 
-ax2.set_title('不同策略的功率变化曲线', fontsize=20)
-ax2.set_xlabel('step数（一个step相当于30秒）', fontsize=20)
-ax2.set_ylabel('恒湿机功率（kw/h）', fontsize=20)
-plt.xticks(fontproperties='Times New Roman', size=20)
-plt.yticks(fontproperties='Times New Roman', size=20)
-plt.legend(loc="upper right", fontsize=20)
-plt.tight_layout()
-plt.show()
+lens = len(filename)
+df1 = pd.DataFrame(merge_data['mean'][:lens].values, columns=['FV'], index=strategyName)
+df2 = pd.DataFrame(merge_data['sum'][lens:2 * lens].values, columns=['EC'], index=strategyName)
+df3 = pd.DataFrame(merge_data['mean'][2 * lens:].values, columns=['UF'], index=strategyName)
+df4 = pd.DataFrame(-((df1.values / 10) * 0.9 + ((df2.values / 50 * 3600 / 5 / seconds - 0.06) / 0.9) * 0.1) * 50,
+                   columns=['R'], index=strategyName)
+df_ = df1.join(df2).join(df3).join(df4)
 
-plt.figure(3)
-plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
-plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
-plt.figure(figsize=(10, 8), dpi=180)
-ax3 = plt.subplot(111)
+df_.T.to_csv(savepic + "result.csv", sep=',', encoding='utf-8')
 
-plt.bar(range(len(sumPowerList)), sumPowerList, color=Color, tick_label=[mm.split(".")[0] for mm in filename],
-        alpha=0.4)
-# ax3.plot(x1_smooth, y1_smooth, label=filename[m].split(".")[0], color=Color[m], ls=Linesty1e[m])
-# plt.fill_between(x1_smooth, 0, y1_smooth, facecolor=Color[m], alpha=0.5)
-
-ax3.set_title('不同策略的总功耗对比', fontsize=20)
-ax3.set_xlabel('不同的策略', fontsize=20)
-ax3.set_ylabel('恒湿机总功耗（KW.h）', fontsize=20)
-plt.xticks(fontproperties='Times New Roman', size=20)
-plt.yticks(fontproperties='Times New Roman', size=20)
-plt.tight_layout()
-plt.show()
+#
+#
+# for m in range(len(PowerList)):
+#     # print(PowerList[m].values)
+#     # print(PowerList[m].index)
+#     # PowerList[m].pop(0)
+#     # print(PowerList[m])
+#     ax2.fill_between(PowerList[m].index, PowerList[m].values, color=Color[m], step="post", alpha=0.2)
+#     ax2.step(PowerList[m].index, PowerList[m].values, label=filename[m].split(".")[0], color=Color[m], ls=Linesty1e[m],
+#              alpha=0.4, where='post')
+#
+# ax2.set_title('不同策略的功率变化曲线', fontsize=20)
+# ax2.set_xlabel('step数（一个step相当于30秒）', fontsize=20)
+# ax2.set_ylabel('恒湿机功率（kw/h）', fontsize=20)
+# plt.xticks(fontproperties='Times New Roman', size=20)
+# plt.yticks(fontproperties='Times New Roman', size=20)
+# plt.legend(loc="upper right", fontsize=20)
+# plt.tight_layout()
+# plt.show()
+#
+# plt.figure(3)
+# plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
+# plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+# plt.figure(figsize=(10, 8), dpi=180)
+# ax3 = plt.subplot(111)
+#
+# plt.bar(range(len(sumPowerList)), sumPowerList, color=Color, tick_label=[mm.split(".")[0] for mm in filename],
+#         alpha=0.4)
+# # ax3.plot(x1_smooth, y1_smooth, label=filename[m].split(".")[0], color=Color[m], ls=Linesty1e[m])
+# # plt.fill_between(x1_smooth, 0, y1_smooth, facecolor=Color[m], alpha=0.5)
+#
+# ax3.set_title('不同策略的总功耗对比', fontsize=20)
+# ax3.set_xlabel('不同的策略', fontsize=20)
+# ax3.set_ylabel('恒湿机总功耗（KW.h）', fontsize=20)
+# plt.xticks(fontproperties='Times New Roman', size=20)
+# plt.yticks(fontproperties='Times New Roman', size=20)
+# plt.tight_layout()
+# plt.show()

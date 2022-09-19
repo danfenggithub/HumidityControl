@@ -4,8 +4,8 @@ from scipy import interpolate
 import matplotlib.pyplot as plt
 from HumidityControl.solutions.gymRoom import *
 
-# pre = "windnoisy/"
-pre = "nowind/"
+pre = "windnoisy/"
+# pre = "nowind/"
 
 # language = "cn"
 language = "us"
@@ -115,7 +115,7 @@ else:
 
 plt.xticks()
 plt.yticks()
-plt.legend(loc="upper right",fontsize=9)
+plt.legend(loc="upper right", fontsize=9)
 plt.tight_layout()
 plt.savefig('Fig14.tiff')
 
@@ -143,28 +143,16 @@ for i in range(len(RHvar)):
 
 merge_data['sum'] = merge_data.iloc[:, :].apply(lambda x: x.sum(), axis=1)
 merge_data['mean'] = merge_data.iloc[:, :-1].apply(lambda x: x.mean(), axis=1)
-merge_data.to_csv("result.csv", sep=',', encoding='utf-8')
-#
-#
-# ax2 = plt.subplot(2,1,2)
-#
-# plt.bar(range(len(sumPowerList)), sumPowerList, color=Color, tick_label=[mm for mm in strategyName1],
-#         alpha=0.4)
-#
-# if language == "cn":
-#     ax2.set_title('不同策略的总功耗对比', fontsize=20)
-#     ax2.set_xlabel('不同的策略', fontsize=20)
-#     ax2.set_ylabel('恒湿机总功耗（KW.h）', fontsize=20)
-# else:
-#     # ax2.set_title('Total power consumption of different strategies')
-#     ax2.set_title('(b)', y=y)
-#     ax2.set_xlabel('Different strategies')
-#     ax2.set_ylabel('Energy consumption (KW.h)')
-# plt.xticks()
-# plt.yticks()
-#
-# plt.tight_layout()
+
+lens = len(filename)
+df1 = pd.DataFrame(merge_data['mean'][:lens].values, columns=['FV'], index=strategyName)
+df2 = pd.DataFrame(merge_data['sum'][lens:2 * lens].values, columns=['EC'], index=strategyName)
+df3 = pd.DataFrame(merge_data['mean'][2 * lens:].values, columns=['UF'], index=strategyName)
+df4 = pd.DataFrame(-((df1.values/10)*0.9+((df2.values/50*3600/5/30-0.06)/0.9)*0.1)*50, columns=['R'], index=strategyName)
+df_ = df1.join(df2).join(df3).join(df4)
+
+df_.T.to_csv(savepic + "result.csv", sep=',', encoding='utf-8')
 
 plt.subplots_adjust(bottom=0.14, left=0.1)
-plt.savefig(savepic + "湿度差和总功耗合图.png")
+plt.savefig(savepic + "mean absolute difference of humidity and total power consumption.png")
 plt.show()

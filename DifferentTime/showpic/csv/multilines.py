@@ -4,14 +4,17 @@ from scipy import interpolate
 import matplotlib.pyplot as plt
 from HumidityControl.solutions.gymRoom import *
 
-flag = 0
+flag = 1
 
 if flag == 0:
     pre = "nowind/"
     select = "multi/nowind.csv"
+    fig_num = 17
+
 else:
     pre = "windnoisy/"
     select = "multi/wind.csv"
+    fig_num = 18
 
 language = "us"
 # language = "us"
@@ -47,7 +50,7 @@ def getdata(i):
     Power1 = pd.read_csv(pre + mins[i] + filename[2])
     Power2 = pd.read_csv(pre + mins[i] + filename[3])
     Power3 = pd.read_csv(pre + mins[i] + filename[4])
-    dqn = pd.read_csv(pre + mins[i] +filename[5])
+    dqn = pd.read_csv(pre + mins[i] + filename[5])
     pid = pd.read_csv(pre + mins[i] + filename[6], encoding='ISO-8859-1')
     pid_m = pd.read_csv(pre + mins[i] + filename[7], encoding='ISO-8859-1')
     our = pd.read_csv(pre + mins[i] + filename[8])
@@ -163,46 +166,7 @@ plt.legend(loc="upper right", fontsize=8)
 # plt.legend(bbox_to_anchor=(num1, num2), loc=num3, borderaxespad=num4, fontsize=10)
 plt.tight_layout()
 plt.subplots_adjust(bottom=0.19, left=0.05)
-plt.savefig('Fig18.tiff')
 
-# ax4 = plt.subplot(224)
-# plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
-# plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
-#
-# # ax4.bar(df.index, df['1 min'], label='1 min')
-# # ax4.bar(df.index, df['3 mins'], label='3 mins')
-# # ax4.bar(df.index, df['5 mins'], label='5 mins')
-# # ax4.bar(df)
-# # df.plot.bar(alpha=0.7)
-# from matplotlib import pyplot as plt
-#
-# x = np.arange(len(df)) + 1
-# # hatchs = ["/", "o", ".", "\\", "*"]
-# # plt.bar(x - 0.2, df['CCS'], alpha=0.6, width=0.1, label=strategyName[0], color=Color[0], hatch=hatchs[0],edgecolor='black')
-# # plt.bar(x - 0.1, df['low gear'], alpha=0.6, width=0.1, label=strategyName[1], lw=1, color=Color[1], hatch=hatchs[1],edgecolor='black')
-# # plt.bar(x, df['middle gear'], alpha=0.6, width=0.1, label=strategyName[2], lw=1, color=Color[2], hatch=hatchs[2],edgecolor='black')
-# # plt.bar(x + 0.1, df['high gear'], alpha=0.6, width=0.1, label=strategyName[3], color=Color[3], hatch=hatchs[3],edgecolor='black')
-# # plt.bar(x + 0.2, df['RH-rainbow'], alpha=0.6, width=0.1, label=strategyName[4], lw=1, color=Color[4], hatch=hatchs[4],edgecolor='black')
-#
-# plt.bar(x - 0.2, df['CCS'], alpha=0.6, width=0.1, label=strategyName[0], color=Color[0], edgecolor='black')
-# plt.bar(x - 0.1, df['low gear'], alpha=0.6, width=0.1, label=strategyName[1], lw=1, color=Color[1], edgecolor='black')
-# plt.bar(x, df['middle gear'], alpha=0.6, width=0.1, label=strategyName[2], lw=1, color=Color[2], edgecolor='black')
-# plt.bar(x + 0.1, df['high gear'], alpha=0.6, width=0.1, label=strategyName[3], color=Color[3], edgecolor='black')
-# plt.bar(x + 0.2, df['RH-rainbow'], alpha=0.6, width=0.1, label=strategyName[4], lw=1, color=Color[4], edgecolor='black')
-#
-# plt.legend(loc="upper left")
-#
-# if language == "cn":
-#     plt.title('不同策略不同时间片的总功耗对比', fontsize=10)
-#     plt.xlabel('不同的策略', fontsize=10)
-#     plt.ylabel('恒湿机总功耗（KW.h）', fontsize=10)
-# else:
-#     plt.title('(d)', y=d)
-#     plt.xlabel('Different time interval ')
-#     plt.ylabel('Energy consumption(kw.h)')
-#
-# plt.xticks([1, 2, 3], ['1min', '3mins', '5mins'])
-#
-# plt.yticks()
-# plt.savefig(pre + '不同策略不同时间片的总功耗对比.png')
+plt.savefig(pre + 'Fig'+str(fig_num)+'.tiff')
+
 plt.show()
