@@ -11,24 +11,22 @@ import os
 
 def getMassFraction(T, RH):
     """
-        温度、湿度对应的空气水分子质量分数
-    :param T: 室内某点的温度
-    :param RH: 室内某点的湿度
-    :return MFdata: 空气水分子质量分数
+        Molecular mass fraction of air and water corresponding to temperature and humidity
+    :param T: Temperature at a point in the room
+    :param RH: Humidity at a certain point in the room
+    :return MFdata: Molecular mass fraction of air and water
     """
     with open(os.path.dirname(os.path.realpath(__file__)) + "/MFdata.json", 'r') as f:
         data = json.load(f)
         T = str(T)
         RH = str(RH)
 
-        # hum_ratio为含湿量
         # hum_ratio is moisture content
         hum_ratio = data[T][RH]
         h2o_ratio = float(hum_ratio) / 1000
         h2o_ratio = round(h2o_ratio, 7)
         air_ratio = float(1) - h2o_ratio
 
-        # 格式化数据
         # Format data
         MFdata = '{' + str(h2o_ratio) + ',' + str(air_ratio) + '}'
 
@@ -38,7 +36,7 @@ import sys
 import time
 
 
-# 控制台输出记录到文件
+# Console output recorded to file
 class Logger(object):
     def __init__(self, file_name="Default.log", stream=sys.stdout):
         self.terminal = stream
@@ -54,13 +52,12 @@ class Logger(object):
 
 def log():
     # Log file location setting
-    # 自定义目录存放日志文件
     log_path = 'out/logs/'
-    # 日志文件名按照程序运行时间设置
+    # The log file name is set according to the program running time
     log_file_name = log_path + 'log-' + time.strftime("%Y%m%d-%H%M%S", time.localtime()) + '.log'
-    # 记录正常的 print 信息
+    # Record normal print information
     sys.stdout = Logger(log_file_name)
-    # 记录 traceback 异常信息
+    # Record traceback exception information
     sys.stderr = Logger(log_file_name)
 
 
@@ -68,7 +65,6 @@ from .gymProfile import *
 
 
 def checkExistFile():
-    # 删除系统中存在的历史文件
     # Delete history files
     if os.path.exists(episode_reward_history_csv):
         os.remove(episode_reward_history_csv)

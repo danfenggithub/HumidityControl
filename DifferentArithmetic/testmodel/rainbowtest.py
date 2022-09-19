@@ -1,10 +1,8 @@
 import os
 
-
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 import tensorflow as tf
-
 
 gpus = tf.config.experimental.list_physical_devices('GPU')
 tf.config.experimental.set_virtual_device_configuration(
@@ -27,7 +25,6 @@ def thread1():
 
 
 def thread2():
-
     subprocess.call(runforStepTest_gymGame_command, shell=True)
 
 
@@ -35,11 +32,13 @@ thread_thred1 = threading.Thread(target=thread1)
 
 thread_thred1.start()
 
-
 checkExistFile()
 time.sleep(2)
 
 state_col_num = 21
+
+# Import the trained model
+
 # network_local = NoisyDuelingNetwork(output_size=192, hidden_sizes=[256, 256], input_size=state_col_num)
 # network_local.build(input_shape=(None, state_col_num))
 # network_local.load_weights("javafile/RHfile_1750")
@@ -86,9 +85,15 @@ while True:
 
     state, _ = env.state(t_step, test=True)
 
-    print(state)
     frame_count += 1
 
+    ################################################################################
+
+    # Different Algorithm
+
+    """
+        RH-rainbow
+    """
     # state_tensor = tf.convert_to_tensor(state)
     # state_tensor = tf.expand_dims(state_tensor, 0)
     # action_values = network_local(tf.cast(state_tensor, dtype=tf.float32))
@@ -100,8 +105,18 @@ while True:
     #           d_action[(action_num % 64 % 16) // 4],
     #           f_action[(action_num % 64 % 16 % 4) // 1]]
 
-    # action_a = action_b = action_c = 1
+    """
+        Different Setting
+    """
+    # action_a = action_b = action_c = 1    # low setting
 
+    # action_a = action_b = action_c = 2    # medium setting
+
+    # action_a = action_b = action_c = 3    # high setting
+
+    """
+        CCS
+    """
     if abs(state[0] - 40) < 1:
         action_a = 0
     else:
@@ -115,15 +130,21 @@ while True:
     else:
         action_c = 1
 
-
-
+    """
+        CCS_M
+    """
     # if abs(np.average(state) - 40) < 1:
     #     action_a, action_b, action_c = 0, 0, 0
     # else:
     #     action_a, action_b, action_c = 1, 1, 1
 
+    ################################################################################
+
     action = [40, 40, 40, action_a, action_b, action_c]
 
+    """
+        wind interference. When step is 14, there is external wind interference
+    """
     if t_step == 14:
         state_next, reward, done, FanPower = env.steprun(action, t_step, IndoorAction=[25, 55, 1])
     else:
@@ -131,14 +152,13 @@ while True:
 
     # state_next, reward, done, FanPower = env.steprun(action, t_step)
 
-    # print(state_next)
     state = np.array(state)
     state_next = np.array(state_next)
 
     each_FanPower_history.append(FanPower)
 
     episode_reward += reward
-
+    print(state)
     print("t_step:", t_step, "action:", action, "reward:", reward, "fanpower:", FanPower)
     t_step += 1
     # if done is True:

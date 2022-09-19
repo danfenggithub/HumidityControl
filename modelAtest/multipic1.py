@@ -83,7 +83,7 @@ RHRewardList = [IfElseRHRewardList / point_num, IfElseRHRewardList_M / point_num
 plt.figure(1, figsize=(5, 3), dpi=600)
 plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
-# 设置xtick和ytick的方向：in、out、inout
+
 plt.rcParams['xtick.direction'] = 'in'
 plt.rcParams['ytick.direction'] = 'in'
 import matplotlib.pyplot as plt

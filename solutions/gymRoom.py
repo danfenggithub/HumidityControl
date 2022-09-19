@@ -6,28 +6,12 @@ from .utils import *
 from .gymProfile import *
 
 
-#################################################################################################
-#
-# # 旧的仿真模型布点编号列表
-# state_21 = [j for j in range(1, 22)]
-# state_15 = [2, 3, 4, 5, 6, 9, 10, 11, 12, 13, 16, 17, 18, 19, 20]
-# state_9 = [2, 4, 6, 9, 11, 13, 16, 18, 20]
-# state_6 = [3, 5, 10, 12, 17, 19]
-#
-# # 新的仿真模型布点编号列表
-# state_36 = [j for j in range(1, 37)]
-# state_20 = [1, 3, 5, 7, 9, 10, 12, 14, 16, 18, 19, 21, 23, 25, 27, 28, 30, 32, 34, 36]
-# state_12 = [1, 5, 9, 10, 14, 18, 19, 23, 27, 28, 32, 36]
-
-# # state_col表示应该选取的湿度点所在的列数索引
-# state_col = [i + 8 for i in state_9]
-################################################################################################
 
 def FanPowerFunction(value):
     """
-        恒湿机风扇的档位与功率的对应值
-    :param value: 恒湿机风扇的档位 (int)
-    :return: 恒湿机的功率（float）
+        Corresponding value of the gear and power of the constant humidity fan
+    :param value: constant humidity setting of fan (int)
+    :return: Power of constant humidity machine (float)
     """
     if value == 1:
         FP = 0.12
@@ -42,13 +26,13 @@ def FanPowerFunction(value):
 
 class roomex(object):
     def __init__(self, statesize=15, physicalTimeStep=30):
-        self.alpha1 = 0.9  # 权重占比
+        self.alpha1 = 0.9  # Weight ratio
         self.alpha2 = 1 - self.alpha1
-        self.RHset = 40  # 湿度设定的目标
-        # self.actionsize = 3 * 4 * 4 * 4  # action维度
-        self.actionsize = 4 * 4 * 4  # action维度
-        self.statesize = statesize  # 湿度传感器的数量
-        self.physicalTimeStep = physicalTimeStep  # 仿真环境中step的物理时间(单位：s)
+        self.RHset = 40  # Humidity setting target
+        # self.actionsize = 3 * 4 * 4 * 4  # Dimension of action
+        self.actionsize = 4 * 4 * 4  # Dimension of action
+        self.statesize = statesize  # Number of humidity sensors
+        self.physicalTimeStep = physicalTimeStep  # Physical time of step in simulation environment (unit: s)
         self.IndoorAction = [25, 40, 0]
 
     def state(self, step, test=False):
@@ -56,42 +40,41 @@ class roomex(object):
         while True:
             try:
                 dfs = pd.read_csv(RHfile)
-                # 获取末状态数据
+                # Get final status data
                 dfdata = dfs.iloc[-1, :]
                 if test is False:
-                    # 获取第12列以后的数据作为state
+                    # Get the data after the 12th column as the state
                     state = dfdata[12:]
                 else:
-                    # 测试阶段获取恒湿机感知周围环境的湿度值
+                    # Acquire the humidity value of the surrounding environment
+                    # perceived by the humidistat machine in the test phase
                     state = dfdata[9:12]
 
-                # 获取真实环境的step步数
+                # Get the step steps of the real environment
                 stepTotal = dfdata[0]
                 state = np.array(state)
                 state = [float('{:.1f}'.format(p)) for p in state]
-                # 根据t_step 判断当前仿真环境有没有执行t_step对应的仿真环境的物理时间
+
                 if int(stepTotal) == (step + 1) * self.physicalTimeStep:
                     break
                 else:
-                    # 修改信使，让 checkinfo.java 放行，执行下一个宏命令
+                    # Modify the messenger to pass the checkinfo.java verification and execute the next macro command
                     with open("javafile/info.txt", "w") as f:
-                        f.write("true")  # 自带文件关闭功能，不需要再写f.close()
-                    # print("等待仿真环境的执行")
+                        f.write("true")
 
                     time.sleep(0.1)
                     continue
             except Exception as e:
-                # 仿真环境初始化的时候，还没生成csv文件才会跑到这里
+                # When the simulation environment is initialized, the csv file has not been generated
                 with open("javafile/info.txt", "w") as f:
-                    f.write("true")  # 自带文件关闭功能，不需要再写f.close()
+                    f.write("true")
                 time.sleep(1)
-                # print(e)
-                # print("等待环境初始化")
+
         return state, stepTotal
 
     def reset(self, RHRESET=50):
-        # 重置仿真环境
-        # 修改 reset.java 文件
+        # Reset Simulation Environment
+        #  Modify reset.java file
         with open(resetfilename, "r+", encoding="utf-8") as f:
             flist = f.readlines()
             MassF = getMassFraction(25, RHRESET)
@@ -108,11 +91,11 @@ class roomex(object):
         :param action:
         :return: None
         """
-        # 修改editandrun.java文件恒湿机的动作参数
+
         with open(editandrunfile, "r+", encoding="utf-8") as f:
             flist = f.readlines()
 
-            # 干球温度25°C、相对湿度,返回h2o和空气的质量分数
+
             MassF1 = getMassFraction(25, action[0])
             MassF2 = getMassFraction(25, action[1])
             MassF3 = getMassFraction(25, action[2])
@@ -137,27 +120,29 @@ class roomex(object):
 
     def steprun(self, action, step, IndoorAction=None):
         """
-            修改恒湿机动作并让仿真环境跑一步
-        :param action: agent动作
+            Modify the action of the constant humidity machine
+            and let the simulation environment run a step
+        :param action: action of agent
         :return: next_s, reward, done, FanPower
         """
-        # 修改editandrun.java文件恒湿机的动作参数
+        # Modify the action parameters of the constant humidity
+        # machine in the editandrun.java file
         with open(editandrunfile, "r+", encoding="utf-8") as f:
             flist = f.readlines()
 
-            # 干球温度25°C、相对湿度,返回h2o和空气的质量分数
+            # Dry bulb temperature 25°C, relative humidity, return h2o and air mass fraction
             MassF1 = getMassFraction(25, action[0])
             MassF2 = getMassFraction(25, action[1])
             MassF3 = getMassFraction(25, action[2])
 
-            # 恒湿机湿度
+            # Humidity of constant humidity machine
             flist[33 - 1] = '\tmassFractionProfile_1.getMethod(ConstantArrayProfileMethod.class).getQuantity().' \
                             'setArray(new DoubleVector(new double[] ' + str(MassF1) + '));\n'
             flist[45 - 1] = '\tmassFractionProfile_2.getMethod(ConstantArrayProfileMethod.class).getQuantity().' \
                             'setArray(new DoubleVector(new double[] ' + str(MassF2) + '));\n'
             flist[57 - 1] = '\tmassFractionProfile_3.getMethod(ConstantArrayProfileMethod.class).getQuantity().' \
                             'setArray(new DoubleVector(new double[] ' + str(MassF3) + '));\n'
-            # 恒湿机风速
+            # Wind speed of constant humidity machine
             flist[37 - 1] = '\tvelocityMagnitudeProfile_1.getMethod(ConstantScalarProfileMethod.class).getQuantity().' \
                             'setValue(' + str(action[3]) + ');\n'
             flist[49 - 1] = '\tvelocityMagnitudeProfile_2.getMethod(ConstantScalarProfileMethod.class).getQuantity().' \
@@ -179,36 +164,38 @@ class roomex(object):
                                 '(ConditionTypeManager.class).get(InletBoundary.class));\n'
                 flist[70 - 1] = '\tboundary_0.setBoundaryType(inletBoundary_0);\n'
 
-                # Indoor 扰动
+
                 flist[72 - 1] = '\tStaticTemperatureProfile staticTemperatureProfile_0 = boundary_0.getValues()' \
                                 '.get(StaticTemperatureProfile.class);\n'
-                # Indoor温度
+                # Temperature of indoor
                 flist[74 - 1] = '\tstaticTemperatureProfile_0.getMethod(ConstantScalarProfileMethod.class).' \
                                 'getQuantity().setValue(' + str(IndoorAction[0]) + ');\n'
                 flist[76 - 1] = '\tMassFractionProfile massFractionProfile_0 = boundary_0.getValues().' \
                                 'get(MassFractionProfile.class);\n'
-                # Indoor湿度
+                # Humidity of indoor
                 flist[78 - 1] = '\tmassFractionProfile_0.getMethod(ConstantArrayProfileMethod.class).getQuantity()' \
                                 '.setArray(new DoubleVector(new double[] ' + \
                                 str(getMassFraction(IndoorAction[0], IndoorAction[1])) + '));\n'
                 flist[80 - 1] = '\tVelocityMagnitudeProfile velocityMagnitudeProfile_0 = ' \
                                 'boundary_0.getValues().get(VelocityMagnitudeProfile.class);\n'
-                # Indoor风速
+                # Wind speed of indoor
                 flist[82 - 1] = '\tvelocityMagnitudeProfile_0.getMethod(ConstantScalarProfileMethod.class).' \
                                 'getQuantity().setValue(' + str(IndoorAction[2]) + ');\n'
         with open(editandrunfile, "w+", encoding="utf-8") as f:
             f.writelines(flist)
 
         step = step + 1
-        # 读取java宏生成的csv文件
+        # Read the csv file generated by java macro
         next_s, stepTotal = self.state(step)
 
         """
         
-            设置奖励函数:     由 21个传感器湿度与目标湿度的差值的绝对值之和 与 恒湿机风扇的功耗 之和构成
+            Set reward function: composed of the sum of the absolute values of 
+            the difference between the 21 sensor humidity and the target humidity 
+            and the sum of the power consumption of the constant humidity fan
         
         """
-        # 获取三个恒湿机的总功耗
+        # Obtain the total power consumption of three constant humidity machines
         FanPower = FanPowerFunction(action[3]) + FanPowerFunction(action[4]) + FanPowerFunction(action[5])
 
         RH_abs = []
@@ -219,8 +206,8 @@ class roomex(object):
             # RH_even.append(abs(next_s[i] - np.mean(next_s)))
 
         reward1 = sum(RH_abs) / self.statesize  # 3 %
-        # reward2 = 0.5 * (sum(RH_even) / len(next_s))  # 均匀
-        # reward3 = sum(RH_abs_state) - sum(RH_abs)  # 快速
+        # reward2 = 0.5 * (sum(RH_even) / len(next_s))
+        # reward3 = sum(RH_abs_state) - sum(RH_abs)
 
         # alpha = 0.9
         # reward = - pow(reward1 / 20, 1 / 2) * alpha - ((FanPower - 0.02 * 3) / 0.9) * (1 - alpha)
@@ -246,7 +233,7 @@ class roomex(object):
 
         """
 
-            设置这个回合的结束条件:    10分钟后就结束循环
+            Set the ending conditions of this round
 
         """
         done = False if stepTotal <= self.physicalTimeStep * 20 else True

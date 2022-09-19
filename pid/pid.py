@@ -45,17 +45,17 @@ class PIDController:
         self.pre_error = 0
 
     def iterate(self, state):
-        # 输入是单点状态，输出是单个动作
+        # The input is a single point state and the output is a single action
 
         self.observed_val_arr.append(state)
         error = self.target_val - self.observed_val_arr[-1]
-        Pout = self.kp * error  # 比例项 Kp * e(t)
+        Pout = self.kp * error  # Kp * e(t)
         self.integral += error * self.dt  # ∑e(t)*△t
-        Iout = self.ki * self.integral  # 积分项 Ki * ∑e(t)*△t
+        Iout = self.ki * self.integral  # Ki * ∑e(t)*△t
         derivative = (error - self.pre_error) / self.dt  # (e(t)-e(t-1))/△t
-        Dout = self.kd * derivative  # 微分项 Kd * (e(t)-e(t-1))/△t
+        Dout = self.kd * derivative  # Kd * (e(t)-e(t-1))/△t
 
-        out_put = Pout + Iout + Dout  # 新的目标值  位置式PID：u(t) = Kp*e(t) + Ki * ∑e(t)*△t + Kd * (e(t)-e(t-1))/△t
+        out_put = Pout + Iout + Dout  # PID：u(t) = Kp*e(t) + Ki * ∑e(t)*△t + Kd * (e(t)-e(t-1))/△t
 
         out_put = round(out_put)
         # print(out_put)
@@ -70,33 +70,36 @@ class PIDController:
 
 
 def pid(statesize=15, physicalTimeStep=30):
-    # 限制 gpu 0 占用内存大小
+    # Limit the memory occupied by gpu 0
     gpus = tf.config.experimental.list_physical_devices('GPU')
     tf.config.experimental.set_virtual_device_configuration(
         gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=600)])
 
-    # 创建生成文件路径，out/logs/ 主要存放日志文件，out/csvfile/ 是每个回合的记录，out/savemodel/ 用于保存模型超参数
+    # Create a path to the generated file.
+    # out/logs/mainly stores log files.
+    # out/csvfile/ is the record of each round.
+    # out/savemodel/ is used to save super parameters of model.
     all_log_path = ['out/logs/', 'out/csvfile/']
     for pathName in all_log_path:
         if not os.path.exists(pathName):
             os.makedirs(pathName)
 
     thread_thred1 = threading.Thread(target=thread1)
-    # 启动子线程
+    # Start sub thread
     thread_thred1.start()
 
-    # 删除系统中存在的历史文件
+    # Delete historical files existing in the system
     checkExistFile()
     time.sleep(2)
 
-    # 对pid进行初始化，目标值是100 ，Kp=0.1 ，Ki=0.15, Kd=0.1
+    # Initialize the pid, the target value is 40, Kp=-0.5, Ki=0, Kd=0.1
     controller1 = PIDController(40, -0.5, 0, 0.1)
     controller2 = PIDController(40, -0.5, 0, 0.1)
     controller3 = PIDController(40, -0.5, 0, 0.1)
 
-    # 修改信使，让 checkinfo.java 放行，执行下一个宏命令
+
     with open("javafile/info.txt", "w") as f:
-        f.write("false")  # 自带文件关闭功能，不需要再写f.close()
+        f.write("false")
 
     if os.path.exists(RHfile):
         os.remove(RHfile)
@@ -111,7 +114,7 @@ def pid(statesize=15, physicalTimeStep=30):
 
     t_step = 0
     time.sleep(5)
-    # 让宏命令挂在后台
+    # Let macro commands hang in the background
     thread_thred2 = threading.Thread(target=thread2)
     thread_thred2.start()
 
@@ -124,11 +127,13 @@ def pid(statesize=15, physicalTimeStep=30):
         action3 = controller3.iterate(state[2])
         action = [40, 40, 40, action1, action2, action3]
 
-        # 所有无干扰实验通用
+        """
+           Common to all interference free experiments
+        """
         # state_next, reward, done, FanPower  = env.steprun(action, t_step)
 
         """
-            modelA干扰实验
+            Model A interference experiment
         """
         # if t_step == 14:
         #     state_next, reward, done, FanPower = env.steprun(action, t_step, IndoorAction=[25, 55, 1])
@@ -137,7 +142,7 @@ def pid(statesize=15, physicalTimeStep=30):
         ##########################################################################################################
 
         """
-            modelB干扰实验
+            Model B interference experiment
         """
 
         # if t_step == 15:
@@ -147,22 +152,22 @@ def pid(statesize=15, physicalTimeStep=30):
         ##########################################################################################################
 
         """
-            不同时间间隔
+            Different time intervals
         """
 
-        # ##  1分钟干扰实验
+        # ##  1-minute interference test
         # if t_step == 15:
         #     state_next, reward, done, FanPower = env.steprun(action, t_step, IndoorAction=[25, 60, 1])
         # else:
         #     state_next, reward, done, FanPower = env.steprun(action, t_step)
 
-        # ##  3分钟干扰实验
+        # ##  3-minute interference test
         # if t_step == 15:
         #     state_next, reward, done, FanPower = env.steprun(action, t_step, IndoorAction=[25, 55, 1])
         # else:
         #     state_next, reward, done, FanPower = env.steprun(action, t_step)
 
-        # ##  5分钟干扰实验
+        # ##  5-minute interference test
         # if t_step == 30:
         #     state_next, reward, done, FanPower = env.steprun(action, t_step, IndoorAction=[25, 45, 1])
         # else:
@@ -170,16 +175,16 @@ def pid(statesize=15, physicalTimeStep=30):
         ##########################################################################################################
 
         """
-            9points实验
+            9points
         """
-        # 单个干扰
+        # Single interference
         if t_step == 14:
             state_next, reward, done, FanPower = env.steprun(action, t_step, IndoorAction=[25, 55, 1])
         else:
             state_next, reward, done, FanPower = env.steprun(action, t_step)
 
 
-        # # 多个干扰
+        # # Multiple interferences
         # if t_step == 15:
         #     state_next, reward, done, FanPower = env.steprun(action, t_step, IndoorAction=[25, 45, 1])
         # elif t_step == 30:

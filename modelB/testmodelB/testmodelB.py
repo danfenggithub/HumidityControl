@@ -78,7 +78,7 @@ env.make(action)
 print(sys.path)
 t_step = 0
 time.sleep(5)
-# 让宏命令挂在后台
+
 thread_thred2 = threading.Thread(target=thread2)
 thread_thred2.start()
 
@@ -93,12 +93,6 @@ while True:
     # state_tensor = tf.expand_dims(state_tensor, 0)
     # action_values = network_local(tf.cast(state_tensor, dtype=tf.float32))
     # action_num = np.argmax(action_values.numpy())
-    # action = [a_action[action_num // 64],
-    #           c_action[action_num // 64],
-    #           e_action[action_num // 64],
-    #           b_action[(action_num % 64) // 16],
-    #           d_action[(action_num % 64 % 16) // 4],
-    #           f_action[(action_num % 64 % 16 % 4) // 1]]
     # action = [40, 40, 40,
     #           b_action[action_num // 16],
     #           d_action[(action_num % 16) // 4],
